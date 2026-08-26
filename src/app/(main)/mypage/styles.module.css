@@ -1,0 +1,39 @@
+/* 마이페이지 전체 컨테이너 */
+.container {
+  max-width: var(--max-width); /* 1280px */
+  margin: 0 auto;
+  padding: 40px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* 타이틀, 상단 카드, 하단 목록 간의 수직 간격 */
+}
+
+/* 상단 '마이 페이지' 대제목 */
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+/* 상단 내 정보 카드 섹션 */
+.profileSection {
+  width: 100%;
+}
+
+/* 하단 목록 섹션 */
+.contentSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 레이아웃 확인용 임시 스타일 (내용 작성 후 삭제) */
+.tempBox {
+  border: 1px dashed var(--gray-300);
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--gray-600);
+}

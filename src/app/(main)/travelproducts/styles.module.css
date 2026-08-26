@@ -1,12 +1,331 @@
 .page {
-  width: calc(100% - 40px);
+  width: 100%;
   max-width: 1280px;
-  min-height: 700px;
-  margin: 0 auto;
-  padding-top: 60px;
+  margin: 0 auto 120px;
 }
 
-.page h1 {
-  margin: 0;
+.featureSection {
+  padding-top: 52px;
+}
+
+.mainTitle {
+  margin: 0 0 24px;
   font-size: 28px;
+}
+
+.featureList {
+  position: relative;
+  display: flex;
+  gap: 24px;
+}
+
+.featureCard {
+  position: relative;
+  width: 628px;
+  height: 628px;
+  overflow: hidden;
+  border-radius: 18px;
+  color: #ffffff;
+}
+
+.featureCard::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 48%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  content: "";
+}
+
+.featureImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featureBookmark {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: rgba(40, 40, 40, 0.7);
+  font-size: 14px;
+}
+
+.featureBookmark img {
+  filter: brightness(0) invert(1);
+}
+
+.featureText {
+  position: absolute;
+  right: 28px;
+  bottom: 26px;
+  left: 28px;
+  z-index: 1;
+}
+
+.featureText strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.featureText p {
+  overflow: hidden;
+  margin: 0 0 14px;
+  color: #eeeeee;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.featureText b {
+  display: block;
+  font-size: 22px;
+  text-align: right;
+}
+
+.nextButton {
+  position: absolute;
+  top: 50%;
+  right: -18px;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #444444;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.adBanner {
+  width: 100%;
+  height: 240px;
+  margin: 60px 0 64px;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.productSection h2 {
+  margin: 0 0 20px;
+  font-size: 26px;
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.tabs button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #777777;
+}
+
+.tabs .activeTab {
+  background: #111111;
+  color: #ffffff;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dateBox,
+.searchBox {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #999999;
+}
+
+.dateBox {
+  width: 286px;
+  gap: 10px;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.searchBox {
+  flex: 1;
+  gap: 10px;
+  padding: 0 16px;
+}
+
+.searchBox input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+.searchButton,
+.sellButton {
+  height: 48px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.searchButton {
+  width: 68px;
+  background: #111111;
+}
+
+.sellButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 178px;
+  background: #2878ee;
+}
+
+.sellButton img {
+  filter: brightness(0) invert(1);
+}
+
+.categoryList {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 108px;
+  border: 0;
+  background: transparent;
+  color: #444444;
+  font-size: 14px;
+}
+
+.category img {
+  width: 40px;
+  height: 40px;
+}
+
+.productList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 42px 32px;
+}
+
+.recentProducts {
+  position: fixed;
+  right: 20px;
+  bottom: 40px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.recentProducts strong {
+  font-size: 13px;
+  text-align: center;
+}
+
+.recentProducts img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+@media (max-width: 1320px) {
+  .page {
+    width: calc(100% - 40px);
+  }
+
+  .featureCard {
+    width: 50%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .productList {
+    justify-content: center;
+  }
+
+  .recentProducts {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .featureList,
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .featureCard {
+    width: 100%;
+  }
+
+  .nextButton {
+    display: none;
+  }
+
+  .dateBox {
+    width: 100%;
+  }
+
+  .searchBox {
+    min-width: 60%;
+  }
+
+  .categoryList {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mainTitle,
+  .productSection h2 {
+    font-size: 22px;
+  }
+
+  .featureText strong {
+    font-size: 18px;
+  }
+
+  .adBanner {
+    height: auto;
+  }
+
+  .searchBox {
+    width: calc(100% - 84px);
+    min-width: 0;
+  }
+
+  .sellButton {
+    width: 100%;
+  }
 }

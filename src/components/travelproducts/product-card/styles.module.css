@@ -1,0 +1,102 @@
+.card {
+  width: 296px;
+  min-height: 416px;
+}
+
+.imageBox {
+  position: relative;
+  width: 296px;
+  height: 296px;
+}
+
+.productImage {
+  width: 296px;
+  height: 296px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.bookmarkButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 7px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(45, 45, 45, 0.7);
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.bookmarkButton img {
+  filter: brightness(0) invert(1);
+}
+
+.bookmarkButton.active {
+  background: #2878ee;
+}
+
+.textBox {
+  padding-top: 12px;
+}
+
+.textBox h3,
+.textBox p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.textBox h3 {
+  margin: 0 0 7px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.textBox p {
+  margin: 0 0 7px;
+  color: #888888;
+  font-size: 13px;
+}
+
+.textBox a {
+  display: block;
+  overflow: hidden;
+  margin-bottom: 12px;
+  color: #2878ee;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bottomRow strong {
+  font-size: 15px;
+}
+
+.writer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #888888;
+  font-size: 13px;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #e7dfcc;
+}

@@ -37,6 +37,7 @@ export default function Header() {
   const point = user?.userPoint?.amount ?? 0;
   const isTripTalkPage = pathname === "/" || pathname.startsWith("/boards");
   const isTravelProductsPage = pathname.startsWith("/travelproducts");
+  const isMyPage = pathname.startsWith("/mypage");
 
   return (
     <header className={styles.header}>
@@ -57,7 +58,9 @@ export default function Header() {
           >
             숙박권 구매
           </Link>
-          <span>마이 페이지</span>
+          <Link className={isMyPage ? styles.active : ""} href="/mypage">
+            마이 페이지
+          </Link>
         </nav>
 
         {accessToken === "" ? (
