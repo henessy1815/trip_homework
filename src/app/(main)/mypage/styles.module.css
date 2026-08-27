@@ -10,9 +10,9 @@
 
 /* 상단 '마이 페이지' 대제목 */
 .title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  color: var(--black);
+  color: #111111;
   margin: 0;
 }
 
@@ -27,13 +27,4 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-/* 레이아웃 확인용 임시 스타일 (내용 작성 후 삭제) */
-.tempBox {
-  border: 1px dashed var(--gray-300);
-  border-radius: 12px;
-  padding: 40px 20px;
-  text-align: center;
-  color: var(--gray-600);
 }
