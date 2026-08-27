@@ -75,7 +75,6 @@
   justify-content: center;
   border-radius: 50%;
   background: #eeeeee;
-  font-size: 13px;
 }
 
 .cardBottom {
@@ -87,7 +86,10 @@
   font-size: 11px;
 }
 
-.cardBottom span {
+.likeCount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   color: #ff7777;
   font-size: 13px;
 }
@@ -122,6 +124,7 @@
   padding: 0 14px;
   flex-shrink: 0;
   align-items: center;
+  gap: 9px;
   border-radius: 6px;
   color: #888888;
   background: #f3f3f3;
@@ -139,10 +142,9 @@
   background: #f3f3f3;
 }
 
-.searchBox span {
-  color: #333333;
-  font-size: 22px;
-  line-height: 1;
+.searchIcon {
+  width: 20px;
+  height: 20px;
 }
 
 .searchBox input {
@@ -179,6 +181,11 @@
   background: #2878ef;
   font-size: 14px;
   font-weight: 700;
+  gap: 8px;
+}
+
+.writeIcon {
+  filter: brightness(0) invert(1);
 }
 
 .tableBox {
@@ -243,6 +250,24 @@
 
 .dateCell {
   color: #aaaaaa;
+}
+
+.deleteButton,
+.deleteSpace {
+  width: 42px;
+  flex-shrink: 0;
+}
+
+.deleteButton {
+  height: 32px;
+  border: 0;
+  opacity: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.row:hover .deleteButton {
+  opacity: 1;
 }
 
 .pagination {

@@ -1,9 +1,10 @@
 "use client";
 
 import { useApolloClient, useQuery } from "@apollo/client/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FETCH_USER_LOGGED_IN } from "@/graphql/queries";
 import type { User } from "@/types/user";
 import styles from "./styles.module.css";
@@ -13,12 +14,20 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // 처음 state를 만들 때 브라우저에 저장된 토큰을 한 번 읽어요.
-  const [accessToken, setAccessToken] = useState(() => {
-    if (typeof window === "undefined") return "";
-    return localStorage.getItem("accessToken") ?? "";
-  });
+  // 서버에는 localStorage가 없으므로 처음에는 로그아웃 상태로 시작해요.
+  const [accessToken, setAccessToken] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // 화면이 브라우저에 나타난 다음 저장된 토큰을 확인해요.
+    // 이렇게 하면 서버 화면과 브라우저의 첫 화면이 달라지는 오류를 막을 수 있어요.
+    const frameId = requestAnimationFrame(() => {
+      const savedAccessToken = localStorage.getItem("accessToken") ?? "";
+      setAccessToken(savedAccessToken);
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, []);
 
   const { data } = useQuery<{ fetchUserLoggedIn: User }>(FETCH_USER_LOGGED_IN, {
     skip: accessToken === "",
@@ -65,7 +74,14 @@ export default function Header() {
 
         {accessToken === "" ? (
           <Link className={styles.loginButton} href="/login">
-            로그인 <span>›</span>
+            로그인
+            <Image
+              className={styles.loginArrow}
+              src="/icons/right_arrow.svg"
+              alt=""
+              width={18}
+              height={18}
+            />
           </Link>
         ) : (
           <div className={styles.profileArea}>
@@ -76,10 +92,18 @@ export default function Header() {
               aria-label="프로필 메뉴 열기"
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
-              <span className={styles.profileAvatar}>👤</span>
-              <span className={styles.profileArrow}>
-                {isMenuOpen ? "▴" : "▾"}
+              <span className={styles.profileAvatar}>
+                <Image src="/icons/person.svg" alt="" width={24} height={24} />
               </span>
+              <Image
+                className={styles.profileArrow}
+                src={
+                  isMenuOpen ? "/icons/up_arrow.svg" : "/icons/down_arrow.svg"
+                }
+                alt=""
+                width={14}
+                height={14}
+              />
             </button>
 
             {isMenuOpen && (
@@ -89,18 +113,45 @@ export default function Header() {
                   type="button"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <span className={styles.menuAvatar}>👤</span>
+                  <span className={styles.menuAvatar}>
+                    <Image
+                      src="/icons/person.svg"
+                      alt=""
+                      width={24}
+                      height={24}
+                    />
+                  </span>
                   <strong>{user?.name ?? "로그인 사용자"}</strong>
-                  <span className={styles.menuArrow}>▴</span>
+                  <Image
+                    className={styles.menuArrow}
+                    src="/icons/up_arrow.svg"
+                    alt=""
+                    width={14}
+                    height={14}
+                  />
                 </button>
 
                 <div className={styles.menuRow}>
-                  <span className={styles.menuIcon}>▣</span>
+                  <span className={styles.menuIcon}>
+                    <Image
+                      src="/icons/point.svg"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  </span>
                   <strong>{point.toLocaleString()} P</strong>
                 </div>
 
                 <button className={styles.menuRow} type="button">
-                  <span className={styles.menuIcon}>⚡</span>
+                  <span className={styles.menuIcon}>
+                    <Image
+                      src="/icons/charge.svg"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  </span>
                   포인트 충전
                 </button>
 
@@ -109,7 +160,14 @@ export default function Header() {
                   type="button"
                   onClick={onClickLogout}
                 >
-                  <span className={styles.menuIcon}>↪</span>
+                  <span className={styles.menuIcon}>
+                    <Image
+                      src="/icons/logout.svg"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  </span>
                   로그아웃
                 </button>
               </div>

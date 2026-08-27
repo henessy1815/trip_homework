@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { FormEvent } from "react";
@@ -9,10 +10,10 @@ import type { Board } from "@/types/board";
 import styles from "./styles.module.css";
 
 const CARD_IMAGES = [
-  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1494783367193-149034c05e8f?auto=format&fit=crop&w=640&q=80",
+  "https://plus.unsplash.com/premium_photo-1677343210638-5d3ce6ddbf85?q=80&w=776&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1719843013722-c2f4d69db940?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1787604590107-d07d5c7cfe20?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1785295210877-04e2c0d9bd52?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ];
 
 const formatDate = (date: string) => date.slice(0, 10).replaceAll("-", ".");
@@ -64,12 +65,27 @@ export default function BoardSection() {
                 <h3>{board.title}</h3>
 
                 <p className={styles.writer}>
-                  <span className={styles.avatar}>👤</span>
+                  <span className={styles.avatar}>
+                    <Image
+                      src="/icons/person.svg"
+                      alt=""
+                      width={18}
+                      height={18}
+                    />
+                  </span>
                   {board.writer ?? "익명"}
                 </p>
 
                 <div className={styles.cardBottom}>
-                  <span>♡ {board.likeCount}</span>
+                  <span className={styles.likeCount}>
+                    <Image
+                      src="/icons/good.svg"
+                      alt=""
+                      width={18}
+                      height={18}
+                    />
+                    {board.likeCount}
+                  </span>
                   <time>{formatDate(board.createdAt)}</time>
                 </div>
               </div>
@@ -85,11 +101,18 @@ export default function BoardSection() {
           <form className={styles.search} onSubmit={onSubmitSearch}>
             {/* 날짜 검색은 모양만 먼저 만들어요. */}
             <div className={styles.dateBox}>
-              ▣&nbsp;&nbsp; YYYY. MM. DD - YYYY. MM. DD
+              <Image src="/icons/calendar.svg" alt="" width={20} height={20} />
+              YYYY. MM. DD - YYYY. MM. DD
             </div>
 
             <label className={styles.searchBox}>
-              <span>⌕</span>
+              <Image
+                className={styles.searchIcon}
+                src="/icons/search.svg"
+                alt=""
+                width={20}
+                height={20}
+              />
               <input
                 value={keyword}
                 onChange={(event) => setKeyword(event.target.value)}
@@ -104,7 +127,14 @@ export default function BoardSection() {
 
           {/* 등록 화면의 기능은 없지만, 빈 페이지로 이동하는 것부터 연습해요. */}
           <Link className={styles.writeButton} href="/boards/new">
-            ▣&nbsp; 트립토크 등록
+            <Image
+              className={styles.writeIcon}
+              src="/icons/rwite.svg"
+              alt=""
+              width={20}
+              height={20}
+            />
+            트립토크 등록
           </Link>
         </div>
 
@@ -114,6 +144,7 @@ export default function BoardSection() {
             <span className={styles.titleCell}>제목</span>
             <span className={styles.writerCell}>작성자</span>
             <span className={styles.dateCell}>날짜</span>
+            <span className={styles.deleteSpace} />
           </div>
 
           {displayedBoards.map((board, index) => (
@@ -128,6 +159,15 @@ export default function BoardSection() {
               <time className={styles.dateCell}>
                 {formatDate(board.createdAt)}
               </time>
+
+              {/* 마우스를 올려야만 삭제 아이콘이 보여요. */}
+              <button
+                className={styles.deleteButton}
+                type="button"
+                aria-label={`${board.title} 삭제`}
+              >
+                <Image src="/icons/delete.svg" alt="" width={17} height={17} />
+              </button>
             </div>
           ))}
 

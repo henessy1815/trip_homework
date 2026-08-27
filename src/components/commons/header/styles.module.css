@@ -77,9 +77,8 @@
   font-weight: 700;
 }
 
-.loginButton span {
-  font-size: 22px;
-  line-height: 1;
+.loginArrow {
+  filter: brightness(0) invert(1);
 }
 
 .profileArea {
@@ -106,11 +105,11 @@
   justify-content: center;
   border-radius: 50%;
   background: #eeeeee;
-  font-size: 18px;
 }
 
 .profileArrow {
-  font-size: 11px;
+  width: 14px;
+  height: 14px;
 }
 
 .profileMenu {
@@ -148,7 +147,6 @@
 
 .menuArrow {
   margin-left: auto;
-  font-size: 11px;
 }
 
 .menuRow:last-child {
@@ -156,9 +154,10 @@
 }
 
 .menuIcon {
+  display: flex;
   width: 28px;
-  font-size: 15px;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 760px) {
