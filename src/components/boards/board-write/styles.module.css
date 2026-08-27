@@ -1,0 +1,247 @@
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 20px 100px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0 0 32px 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* 2열 가로 배치 (작성자 / 비밀번호) */
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.row .field {
+  flex: 1;
+}
+
+/* 필드 공통 */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 라벨 및 필수(*) 마크 */
+.label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.required {
+  color: #f66a6a;
+  margin-left: 2px;
+}
+
+/* 기본 Input */
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111111;
+  outline: none;
+  background-color: #ffffff;
+}
+
+.input::placeholder {
+  color: #9e9e9e;
+}
+
+.input:focus {
+  border-color: #111111;
+}
+
+/* 내용 Textarea */
+.textarea {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111111;
+  outline: none;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.textarea::placeholder {
+  color: #9e9e9e;
+}
+
+.textarea:focus {
+  border-color: #111111;
+}
+
+/* 주소 우편번호 행 */
+.zipcodeRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.zipcodeInput {
+  width: 100px;
+  text-align: center;
+}
+
+.zipcodeButton {
+  height: 48px;
+  padding: 0 20px;
+  background-color: #ffffff;
+  border: 1px solid #111111;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 사진 첨부 박스 공통 */
+.uploadGroup {
+  display: flex;
+  gap: 16px;
+}
+
+.uploadBox {
+  width: 120px;
+  height: 120px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.uploadBox:hover {
+  background-color: #ebebeb;
+}
+
+.plusIcon {
+  font-size: 24px;
+  color: #666666;
+  line-height: 1;
+}
+
+.uploadText {
+  font-size: 12px;
+  color: #666666;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* 첨부된 사진 미리보기 박스 */
+.previewBox {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 이미지 우측 상단 닫기/삭제 (X) 버튼 */
+.removeButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.removeButton:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* 하단 버튼 그룹 */
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* 취소 버튼 */
+.cancelButton {
+  min-width: 90px;
+  height: 48px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  border: 1px solid #111111;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+}
+
+/* 등록하기 버튼 (비활성화 상태) */
+.submitButton {
+  min-width: 90px;
+  height: 48px;
+  padding: 0 24px;
+  background-color: #bdbdbd;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
+
+/* 등록하기 버튼 (활성화 상태: 피그마 파란색 #2878ee) */
+.submitButton.active {
+  background-color: #2878ee;
+  cursor: pointer;
+}
+
+.submitButton.active:hover {
+  background-color: #1d65d4;
+}
+
+/* 섹션 구분선 */
+.divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e4e4e4; /* 또는 #e5e5e5 */
+  margin: 10px 0;
+}
