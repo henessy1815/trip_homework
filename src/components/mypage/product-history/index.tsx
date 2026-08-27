@@ -59,7 +59,7 @@ export default function ProductHistory({ activeTab }: ProductHistoryProps) {
       <div className={styles.table}>
         <div className={styles.tableHeader}>
           <span className={styles.number}>번호</span>
-          <span className={styles.productName}>상품 명</span>
+          <span className={styles.productName}>상품명</span>
           <span className={styles.price}>판매가격</span>
 
           {/* 북마크 화면에서만 판매자 열이 보여요. */}
@@ -74,8 +74,17 @@ export default function ProductHistory({ activeTab }: ProductHistoryProps) {
         {products.map((product) => (
           <div className={styles.tableRow} key={product.id}>
             <span className={styles.number}>{product.id}</span>
+            {/* 상품명을 판매 완료 여부에 따라 클래스를 다르게 적용 */}
             <span className={styles.productName}>
-              {product.title}
+              <span
+                className={
+                  isMine && product.isSold
+                    ? styles.soldTitle
+                    : styles.activeTitle
+                }
+              >
+                {product.title}
+              </span>
 
               {/* 파란 글자는 북마크 표시가 아니라 판매 상태예요. */}
               {isMine && product.isSold && (

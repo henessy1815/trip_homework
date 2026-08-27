@@ -56,7 +56,14 @@
 .tableHeader {
   height: 42px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #111111;
+}
+
+/* 헤더의 '번호'는 회색이 아닌 검은색 볼드 적용 */
+.tableHeader .number {
+  color: #111111;
+  font-weight: 700;
 }
 
 .tableRow {
@@ -80,25 +87,36 @@
   gap: 8px;
 }
 
+.activeTitle {
+  color: #111111;
+  font-weight: 700;
+}
+
+.soldTitle {
+  color: #999999;
+  font-weight: 400;
+}
+
 .sold {
   color: var(--blue);
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
+  font-weight: 700;
 }
 
 .price {
   width: 110px;
-  text-align: right;
+  text-align: center;
 }
 
 .seller {
   width: 90px;
-  text-align: right;
+  text-align: center;
 }
 
 .date {
   width: 110px;
-  text-align: right;
+  text-align: center;
 }
 
 .deleteButton,

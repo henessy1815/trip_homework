@@ -53,34 +53,48 @@
 /* 전체 화면은 네 칸을 사용해요. 거래내역은 남은 공간을 차지하고 오른쪽에 맞추고, 잔액은 가장 오른쪽에 고정되어요. */
 .allColumns span:nth-child(1) {
   width: 140px;
+  text-align: center;
 }
 
 .allColumns span:nth-child(2) {
   width: 160px;
+  text-align: center;
 }
 
 .allColumns span:nth-child(3) {
   flex: 1;
-  text-align: right;
+  text-align: center;
 }
 
 .allColumns span:nth-child(4) {
   width: 130px;
-  text-align: right;
+  text-align: center;
 }
 
-/* 판매 화면은 두 칸만 사용해요. */
-.twoColumns span:nth-child(1) {
-  width: 200px;
+/* 판매 화면 4개 컬럼 너비 및 우측 정렬 설정 */
+.sellColumns span:nth-child(1) {
+  width: 140px; /* 거래일 */
+  text-align: center;
 }
 
-.twoColumns span:nth-child(2) {
-  flex: 1;
+.sellColumns span:nth-child(2) {
+  flex: 1; /* 상품 명 (남은 공간 차지) */
+}
+
+.sellColumns span:nth-child(3) {
+  width: 140px; /* 거래내역 (파란색 +금액) */
+  text-align: center;
+}
+
+.sellColumns span:nth-child(4) {
+  width: 130px; /* 거래 후 잔액 */
+  text-align: center;
 }
 
 /* 충전 화면은 결제 ID가 남은 공간을 차지하고, 충전내역과 잔액이 오른쪽에 고정되어요. */
 .chargeColumns span:nth-child(1) {
   width: 160px;
+  text-align: center;
 }
 
 .chargeColumns span:nth-child(2) {
@@ -89,17 +103,18 @@
 
 .chargeColumns span:nth-child(3) {
   width: 140px;
-  text-align: right;
+  text-align: center;
 }
 
 .chargeColumns span:nth-child(4) {
   width: 130px;
-  text-align: right;
+  text-align: center;
 }
 
 /* 구매 화면은 상품명이 가운데에서 남은 공간을 사용해요. */
 .buyColumns span:nth-child(1) {
   width: 110px;
+  text-align: center;
 }
 
 .buyColumns span:nth-child(2) {
@@ -108,17 +123,17 @@
 
 .buyColumns span:nth-child(3) {
   width: 140px;
-  text-align: right;
+  text-align: center;
 }
 
 .buyColumns span:nth-child(4) {
   width: 130px;
-  text-align: right;
+  text-align: center;
 }
 
 .buyColumns span:nth-child(5) {
   width: 90px;
-  text-align: right;
+  text-align: center;
 }
 
 .date {

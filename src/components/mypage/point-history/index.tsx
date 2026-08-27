@@ -174,7 +174,7 @@ export default function PointHistory({ activeTab }: PointHistoryProps) {
           <>
             <div className={`${styles.tableHeader} ${styles.buyColumns}`}>
               <span>거래일</span>
-              <span>상품 명</span>
+              <span>상품명</span>
               <span>거래내역</span>
               <span>거래 후 잔액</span>
               <span>판매자</span>
@@ -195,21 +195,24 @@ export default function PointHistory({ activeTab }: PointHistoryProps) {
           </>
         )}
 
-        {/* 판매 내역은 거래일과 상품 명등을 보여줘요. */}
+        {/* 판매 내역은 거래일, 상품 명, 거래내역, 거래 후 잔액을 보여줘요. */}
         {activeTab === "sell" && (
           <>
-            <div className={`${styles.tableHeader} ${styles.twoColumns}`}>
+            <div className={`${styles.tableHeader} ${styles.sellColumns}`}>
               <span>거래일</span>
-              <span>상품 명</span>
+              <span>상품명</span>
+              <span>거래내역</span>
+              <span>거래 후 잔액</span>
             </div>
-
             {rowNumbers.map((number) => (
               <div
-                className={`${styles.tableRow} ${styles.twoColumns}`}
+                className={`${styles.tableRow} ${styles.sellColumns}`}
                 key={number}
               >
                 <span className={styles.date}>2024.12.16</span>
-                <span>파라다이스 호텔 제주</span>
+                <span>파르나스 호텔 제주</span>
+                <span className={styles.plus}>+1,000,000</span>
+                <span>1,222,000</span>
               </div>
             ))}
           </>
