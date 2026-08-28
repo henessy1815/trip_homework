@@ -4,6 +4,54 @@ import { useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
 
+// 화면 확인용 문의/답변 더미 데이터
+const DUMMY_COMMENTS = [
+  {
+    id: 1,
+    writer: "홍길동",
+    avatar: "/images/a.png",
+    content:
+      "살겠노라 살겠노라. 청산에 살겠노라.\n머루랑 다래를 먹고 청산에 살겠노라.\n알리알리 알랑성 알라리 알라",
+    date: "2024.11.11",
+    replies: [],
+  },
+  {
+    id: 2,
+    writer: "자유로운 실버",
+    avatar: "/images/b.png",
+    content:
+      "살겠노라 살겠노라. 청산에 살겠노라.\n머루랑 다래를 먹고 청산에 살겠노라.\n알리알리 알랑성 알라리 알라",
+    date: "2024.11.11",
+    replies: [
+      {
+        id: 21,
+        writer: "판매자",
+        avatar: "/images/b.png",
+        content:
+          "살겠노라 살겠노라. 청산에 살겠노라.\n머루랑 다래를 먹고 청산에 살겠노라.\n알리알리 알랑성 알라리 알라",
+        date: "2024.11.11",
+      },
+      {
+        id: 22,
+        writer: "판매자",
+        avatar: "/images/b.png",
+        content:
+          "살겠노라 살겠노라. 청산에 살겠노라.\n머루랑 다래를 먹고 청산에 살겠노라.\n알리알리 알랑성 알라리 알라",
+        date: "2024.11.11",
+      },
+    ],
+  },
+  {
+    id: 3,
+    writer: "둘리",
+    avatar: null,
+    content:
+      "살겠노라 살겠노라. 청산에 살겠노라.\n머루랑 다래를 먹고 청산에 살겠노라.\n알리알리 알랑성 알라리 알라",
+    date: "2024.11.11",
+    replies: [],
+  },
+];
+
 type ProductDetailProps = {
   productId: string;
 };
@@ -11,8 +59,49 @@ type ProductDetailProps = {
 export default function ProductDetail({ productId }: ProductDetailProps) {
   const [comment, setComment] = useState("");
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [replyOpenId, setReplyOpenId] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [comments, setComments] = useState(DUMMY_COMMENTS);
+  const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
+  const [editText, setEditText] = useState("");
 
   const isCommentValid = comment.trim().length > 0;
+  const isReplyValid = replyText.trim().length > 0;
+
+  const handleDeleteReply = (commentId: number, replyId: number) => {
+    if (confirm("답변을 삭제하시겠습니까?")) {
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === commentId
+            ? { ...c, replies: c.replies.filter((r) => r.id !== replyId) }
+            : c,
+        ),
+      );
+    }
+  };
+
+  const handleStartEdit = (replyId: number, currentContent: string) => {
+    setEditingReplyId(replyId);
+    setEditText(currentContent);
+  };
+
+  const handleSaveEdit = (commentId: number, replyId: number) => {
+    if (!editText.trim()) return;
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === commentId
+          ? {
+              ...c,
+              replies: c.replies.map((r) =>
+                r.id === replyId ? { ...r, content: editText } : r,
+              ),
+            }
+          : c,
+      ),
+    );
+    setEditingReplyId(null); // 수정 모드 종료
+    setEditText("");
+  };
 
   return (
     <div className={styles.container}>
@@ -187,6 +276,171 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
           </button>
         </div>
       </section>
+
+      {/* 6. 문의 및 답변 리스트 영역 */}
+      <div className={styles.commentListSection}>
+        {comments.map((item) => (
+          <div key={item.id} className={styles.commentItemWrapper}>
+            {/* 원글(문의) */}
+            <div className={styles.commentCard}>
+              <div className={styles.commentUser}>
+                <div className={styles.avatar}>
+                  {item.avatar ? (
+                    <img src={item.avatar} alt={item.writer} />
+                  ) : (
+                    <Image
+                      src="/icons/person.svg"
+                      alt=""
+                      width={16}
+                      height={16}
+                    />
+                  )}
+                </div>
+                <span className={styles.commentUserName}>{item.writer}</span>
+              </div>
+              <p className={styles.commentContent}>{item.content}</p>
+              <span className={styles.commentDate}>{item.date}</span>
+              <button
+                type="button"
+                className={styles.replyButton}
+                onClick={() =>
+                  setReplyOpenId(replyOpenId === item.id ? null : item.id)
+                }
+              >
+                <Image src="/icons/chat.svg" alt="" width={16} height={16} />
+                <span>답변 하기</span>
+              </button>
+            </div>
+            {/* 대댓글(답변) 목록 */}
+            {item.replies.length > 0 && (
+              <div className={styles.repliesList}>
+                {item.replies.map((reply) => (
+                  <div key={reply.id} className={styles.replyCard}>
+                    <div className={styles.replyArrow}>↳</div>
+                    <div className={styles.replyBody}>
+                      <div className={styles.replyHeader}>
+                        <div className={styles.commentUser}>
+                          <div className={styles.avatar}>
+                            <img src={reply.avatar} alt={reply.writer} />
+                          </div>
+                          <span className={styles.commentUserName}>
+                            {reply.writer}
+                          </span>
+                        </div>
+
+                        {/* 1. 수정/삭제 버튼에 onClick 연결 */}
+                        <div className={styles.replyActions}>
+                          <button
+                            type="button"
+                            className={styles.actionBtn}
+                            title="수정"
+                            onClick={() =>
+                              handleStartEdit(reply.id, reply.content)
+                            }
+                          >
+                            <Image
+                              src="/icons/edit.svg"
+                              alt="수정"
+                              width={14}
+                              height={14}
+                            />
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.actionBtn}
+                            title="삭제"
+                            onClick={() => handleDeleteReply(item.id, reply.id)}
+                          >
+                            <Image
+                              src="/icons/close.svg"
+                              alt="삭제"
+                              width={14}
+                              height={14}
+                            />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 👉 2. 지금 이 답글이 '수정 중'이면 수정창을, 아니면 '원래 글'을 보여줌 */}
+                      {editingReplyId === reply.id ? (
+                        <div className={styles.editBox}>
+                          <textarea
+                            className={styles.commentTextarea}
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            rows={3}
+                          />
+                          <div className={styles.editButtonGroup}>
+                            <button
+                              type="button"
+                              className={styles.cancelBtn}
+                              onClick={() => setEditingReplyId(null)}
+                            >
+                              취소
+                            </button>
+                            <button
+                              type="button"
+                              className={`${styles.submitBtn} ${styles.active}`}
+                              onClick={() => handleSaveEdit(item.id, reply.id)}
+                            >
+                              수정 완료
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <p className={styles.commentContent}>
+                            {reply.content}
+                          </p>
+                          <span className={styles.commentDate}>
+                            {reply.date}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* 답변 작성 폼 (답변 하기 클릭 시 표시) */}
+            {replyOpenId === item.id && (
+              <div className={styles.replyFormBox}>
+                <div className={styles.commentBox}>
+                  <textarea
+                    className={styles.commentTextarea}
+                    placeholder="답변할 내용을 입력해 주세요."
+                    maxLength={100}
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                  />
+                  <div className={styles.commentBottom}>
+                    <span className={styles.charCount}>
+                      {replyText.length}/100
+                    </span>
+                  </div>
+                </div>
+                <div className={styles.replyButtonGroup}>
+                  <button
+                    type="button"
+                    className={styles.cancelBtn}
+                    onClick={() => setReplyOpenId(null)}
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!isReplyValid}
+                    className={`${styles.submitBtn} ${isReplyValid ? styles.active : ""}`}
+                  >
+                    답변 하기
+                  </button>
+                </div>
+              </div>
+            )}
+            <hr className={styles.commentDivider} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

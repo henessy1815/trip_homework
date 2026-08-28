@@ -27,7 +27,9 @@ export default function ProductCard({
   //아직 api는 연결하지 않았으므로 누른 카드의 북마크만 임시로 바꿈
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  const handleBookmark = () => {
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsBookmarked(!isBookmarked);
   };
 
@@ -56,7 +58,7 @@ export default function ProductCard({
       <div className={styles.textBox}>
         <h3>{title}</h3>
         <p>{description}</p>
-        <a href="#product-list">{tag}</a>
+        <span className={styles.tag}>{tag}</span>
 
         <div className={styles.bottomRow}>
           <div className={styles.writer}>
