@@ -152,15 +152,16 @@ export default function TravelProductsPage() {
 
           <div className={styles.productList} id="product-list">
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                image={product.image}
-                title="강동 캠퍼스에서 쉬어가세요"
-                description="편안한 클라스룸에서 코딩의 피로를 풀어 보세요."
-                tag="#7인 이하 #코딩 #캠퍼스 #리프레시 가능"
-                writer={product.writer}
-                price="33,000 원"
-              />
+              <Link href={`/travelproducts/${product.id}`} key={product.id}>
+                <ProductCard
+                  image={product.image}
+                  title="강동 캠퍼스에서 쉬어가세요"
+                  description="편안한 클라스룸에서 코딩의 피로를 풀어 보세요."
+                  tag="#7인 이하 #코딩 #캠퍼스 #리프레시 가능"
+                  writer={product.writer}
+                  price="33,000 원"
+                />
+              </Link>
             ))}
           </div>
         </section>
