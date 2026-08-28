@@ -4,8 +4,25 @@ import { useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
 
+// 댓글 및 답글 타입 정의 추가
+type ReplyItem = {
+  id: number;
+  writer: string;
+  avatar: string;
+  content: string;
+  date: string;
+};
+type CommentItem = {
+  id: number;
+  writer: string;
+  avatar: string | null;
+  content: string;
+  date: string;
+  replies: ReplyItem[];
+};
+
 // 화면 확인용 문의/답변 더미 데이터
-const DUMMY_COMMENTS = [
+const DUMMY_COMMENTS: CommentItem[] = [
   {
     id: 1,
     writer: "홍길동",
@@ -61,7 +78,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [replyOpenId, setReplyOpenId] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
-  const [comments, setComments] = useState(DUMMY_COMMENTS);
+  const [comments, setComments] = useState<CommentItem[]>(DUMMY_COMMENTS);
   const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
 
