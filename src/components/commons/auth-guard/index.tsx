@@ -7,7 +7,6 @@ import type { ReactNode } from "react";
 import { FETCH_USER_LOGGED_IN } from "@/graphql/queries";
 import { getAccessToken, removeAccessToken } from "@/lib/auth";
 import styles from "./styles.module.css";
-import { access } from "fs";
 
 type AuthGuardProps = {
   children: ReactNode;

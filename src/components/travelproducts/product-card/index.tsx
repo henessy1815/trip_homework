@@ -2,9 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-
 import styles from "./styles.module.css";
-import { PreviewData } from "next";
 
 // 상품 카드가 받아야하는 값들의 타입
 type ProductCardProps = {
