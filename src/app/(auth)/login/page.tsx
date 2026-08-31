@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { LOGIN_USER } from "@/graphql/mutations";
+import { saveAccessToken } from "@/lib/auth";
 import styles from "../auth.module.css";
 
 type LoginResult = {
@@ -36,9 +37,9 @@ export default function LoginPage() {
 
       if (!accessToken) return;
 
-      // 초기 수업에서는 token을 localStorage에 저장해요.
-      // 나중에 refresh token을 배우면 더 안전한 방식으로 바꿔요.
-      localStorage.setItem("accessToken", accessToken);
+      // 토큰은 현재 탭을 닫으면 사라지는 sessionStorage에 저장해요.
+      // 실제 서비스에서는 이후 refresh token으로 로그인을 연장할 수 있어요.
+      saveAccessToken(accessToken);
       router.replace("/");
     } catch (error) {
       setErrorMessage(

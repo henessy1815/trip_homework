@@ -8,6 +8,7 @@ import {
 } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client/react";
 import type { ReactNode } from "react";
+import { getAccessToken } from "@/lib/auth";
 
 const httpLink = new HttpLink({
   uri: "/api/graphql",
@@ -16,8 +17,8 @@ const httpLink = new HttpLink({
 
 const authLink = new ApolloLink((operation, forward) => {
   // 로그인 후 저장한 accessToken을 매 API 요청에 넣어요.
-  const accessToken =
-    typeof window === "undefined" ? "" : localStorage.getItem("accessToken");
+  // 만료된 토큰은 getAccessToken 함수가 먼저 지워 줘요.
+  const accessToken = getAccessToken();
 
   operation.setContext({
     headers: {

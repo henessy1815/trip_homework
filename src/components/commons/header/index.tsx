@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FETCH_USER_LOGGED_IN } from "@/graphql/queries";
+import { getAccessToken, removeAccessToken } from "@/lib/auth";
 import type { User } from "@/types/user";
 import styles from "./styles.module.css";
 
@@ -14,7 +15,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // 서버에는 localStorage가 없으므로 처음에는 로그아웃 상태로 시작해요.
+  // 서버에는 sessionStorage가 없으므로 처음에는 로그아웃 상태로 시작해요.
   const [accessToken, setAccessToken] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -22,21 +23,39 @@ export default function Header() {
     // 화면이 브라우저에 나타난 다음 저장된 토큰을 확인해요.
     // 이렇게 하면 서버 화면과 브라우저의 첫 화면이 달라지는 오류를 막을 수 있어요.
     const frameId = requestAnimationFrame(() => {
-      const savedAccessToken = localStorage.getItem("accessToken") ?? "";
+      const savedAccessToken = getAccessToken();
       setAccessToken(savedAccessToken);
     });
 
     return () => cancelAnimationFrame(frameId);
   }, []);
 
-  const { data } = useQuery<{ fetchUserLoggedIn: User }>(FETCH_USER_LOGGED_IN, {
-    skip: accessToken === "",
-    ssr: false,
-  });
+  const { data, error } = useQuery<{ fetchUserLoggedIn: User }>(
+    FETCH_USER_LOGGED_IN,
+    {
+      skip: accessToken === "",
+      ssr: false,
+      fetchPolicy: "no-cache",
+    },
+  );
+
+  useEffect(() => {
+    // 서버가 만료되거나 잘못된 토큰이라고 알려주면 로그아웃 상태로 바꿔요.
+    if (!error) return;
+
+    removeAccessToken();
+    void client.clearStore();
+
+    const frameId = requestAnimationFrame(() => {
+      setAccessToken("");
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [client, error]);
 
   const onClickLogout = async () => {
     // 저장했던 토큰과 Apollo에 남아 있는 로그인 정보를 함께 지워요.
-    localStorage.removeItem("accessToken");
+    removeAccessToken();
     setAccessToken("");
     await client.clearStore();
     router.push("/");
