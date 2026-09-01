@@ -1,7 +1,10 @@
 "use client";
 
-import { useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from "@apollo/client/react";
+import Image from "next/image";
 import Link from "next/link";
+import BoardComments from "@/components/boards/board-comments";
+import { DISLIKE_BOARD, LIKE_BOARD } from "@/graphql/mutations";
 import { FETCH_BOARD } from "@/graphql/queries";
 import type { Board } from "@/types/board";
 import styles from "./styles.module.css";
@@ -28,13 +31,26 @@ type BoardDetailProps = {
 
 export default function BoardDetail({ boardId }: BoardDetailProps) {
   // 목록에서 받은 boardId를 변수로 보내 게시글 하나만 조회해요.
-  const { data, loading, error } = useQuery<{ fetchBoard: Board }>(
+  const { data, loading, error, refetch } = useQuery<{ fetchBoard: Board }>(
     FETCH_BOARD,
     {
       variables: { boardId },
       ssr: false,
     },
   );
+
+  const [likeBoard] = useMutation(LIKE_BOARD);
+  const [dislikeBoard] = useMutation(DISLIKE_BOARD);
+
+  const onClickLike = async () => {
+    await likeBoard({ variables: { boardId } });
+    await refetch();
+  };
+
+  const onClickDislike = async () => {
+    await dislikeBoard({ variables: { boardId } });
+    await refetch();
+  };
 
   if (loading)
     return <p className={styles.state}>게시글을 불러오고 있어요...</p>;
@@ -53,7 +69,6 @@ export default function BoardDetail({ boardId }: BoardDetailProps) {
           <strong>{board.writer ?? "익명"}</strong>
           <time>{board.createdAt.slice(0, 10).replaceAll("-", ".")}</time>
         </div>
-        <span className={styles.like}>♡ {board.likeCount}</span>
       </div>
 
       <img
@@ -63,10 +78,46 @@ export default function BoardDetail({ boardId }: BoardDetailProps) {
       />
       <p className={styles.contents}>{removeHtmlTags(board.contents)}</p>
 
-      <div className={styles.actions}>
-        <button type="button">♡ 좋아요</button>
-        <Link href="/">☰ 목록으로</Link>
+      <div className={styles.reactionArea}>
+        <button
+          className={styles.reaction}
+          type="button"
+          onClick={onClickDislike}
+        >
+          <Image
+            className={styles.dislikeIcon}
+            src="/icons/bad.svg"
+            alt="싫어요"
+            width={36}
+            height={36}
+          />
+          <span>{board.dislikeCount ?? 0}</span>
+        </button>
+
+        <button className={styles.reaction} type="button" onClick={onClickLike}>
+          <Image
+            className={styles.likeIcon}
+            src="/icons/good.svg"
+            alt="좋아요"
+            width={36}
+            height={36}
+          />
+          <span>{board.likeCount}</span>
+        </button>
       </div>
+
+      <div className={styles.actions}>
+        <Link href="/">
+          <Image src="/icons/menu.svg" alt="" width={20} height={20} />
+          목록으로
+        </Link>
+        {/* 수정 페이지 API 연결 전이라 버튼 모양만 먼저 만들어요. */}
+        <button type="button">
+          <Image src="/icons/edit.svg" alt="" width={20} height={20} />
+          수정하기
+        </button>
+      </div>
+      <BoardComments boardId={boardId} />
     </article>
   );
 }

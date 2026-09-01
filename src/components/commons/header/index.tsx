@@ -10,6 +10,12 @@ import { getAccessToken, removeAccessToken } from "@/lib/auth";
 import type { User } from "@/types/user";
 import styles from "./styles.module.css";
 
+const getProfileUrl = (picture?: string | null) => {
+  if (!picture) return "";
+  if (picture.startsWith("http") || picture.startsWith("/")) return picture;
+  return `https://storage.googleapis.com/${picture}`;
+};
+
 export default function Header() {
   const client = useApolloClient();
   const pathname = usePathname();
@@ -63,6 +69,7 @@ export default function Header() {
 
   const user = data?.fetchUserLoggedIn;
   const point = user?.userPoint?.amount ?? 0;
+  const profileUrl = getProfileUrl(user?.picture);
   const isTripTalkPage = pathname === "/" || pathname.startsWith("/boards");
   const isTravelProductsPage = pathname.startsWith("/travelproducts");
   const isMyPage = pathname.startsWith("/mypage");
@@ -112,7 +119,16 @@ export default function Header() {
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
               <span className={styles.profileAvatar}>
-                <Image src="/icons/person.svg" alt="" width={24} height={24} />
+                {profileUrl ? (
+                  <img src={profileUrl} alt={user?.name ?? "프로필"} />
+                ) : (
+                  <Image
+                    src="/icons/person.svg"
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
+                )}
               </span>
               <Image
                 className={styles.profileArrow}
@@ -133,12 +149,16 @@ export default function Header() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <span className={styles.menuAvatar}>
-                    <Image
-                      src="/icons/person.svg"
-                      alt=""
-                      width={24}
-                      height={24}
-                    />
+                    {profileUrl ? (
+                      <img src={profileUrl} alt={user?.name ?? "프로필"} />
+                    ) : (
+                      <Image
+                        src="/icons/person.svg"
+                        alt=""
+                        width={24}
+                        height={24}
+                      />
+                    )}
                   </span>
                   <strong>{user?.name ?? "로그인 사용자"}</strong>
                   <Image

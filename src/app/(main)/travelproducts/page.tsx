@@ -1,28 +1,19 @@
+"use client";
+
+import { useQuery } from "@apollo/client/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import type { FormEvent } from "react";
 
 import HeroBanner from "@/components/home/hero-banner";
 import ProductCard from "@/components/travelproducts/product-card";
+import { FETCH_TRAVELPRODUCTS } from "@/graphql/queries";
+import type { Travelproduct } from "@/types/travelproduct";
 
 import styles from "./styles.module.css";
 
-// 상단의 큰 추천 숙소 카드에 보여 줄 내용
-const featuredProducts = [
-  {
-    id: 1,
-    image: "/images/a.png",
-    title: "포항 : 당장 가고 싶은 숙소",
-    description: "살어리 살어리랐다 청산(靑山)에 쉬어가요.",
-  },
-  {
-    id: 2,
-    image: "/images/b.png",
-    title: "강릉 : 마음까지 깨끗해지는 하얀 숙소",
-    description: "시원한 바다와 하늘을 한눈에 담아보세요.",
-  },
-];
-
-// 검색창 아래에 보여 줄 숙소 테마와 아이콘
+// 검색창 아래에 보여 줄 숙소 테마와 아이콘이에요.
 const categories = [
   { name: "1인 전용", icon: "/icons/single_person_accommodation.svg" },
   { name: "아파트", icon: "/icons/apartment.svg" },
@@ -35,22 +26,34 @@ const categories = [
   { name: "플랜테리어", icon: "/icons/planterior.svg" },
 ];
 
-// 현재는 api를 연결하지 않고, 화면 연습을 위한 임시 상품 보여주기
-const products = [
-  { id: 1, image: "/images/a.png", writer: "반얀트리" },
-  { id: 2, image: "/images/c.png", writer: "트립러버" },
-  { id: 3, image: "/images/d.png", writer: "반얀트리" },
-  { id: 4, image: "/images/b.png", writer: "바다좋아" },
-  { id: 5, image: "/images/c.png", writer: "여행일기" },
-  { id: 6, image: "/images/d.png", writer: "쉬어가요" },
-  { id: 7, image: "/images/b.png", writer: "트립러버" },
-  { id: 8, image: "/images/a.png", writer: "반얀트리" },
-];
+const getImageUrl = (images?: string[]) => {
+  const image = images?.find((item) => item !== "");
+  if (!image) return "/images/a.png";
+  if (image.startsWith("http")) return image;
+  return `https://storage.googleapis.com/${image}`;
+};
 
 export default function TravelProductsPage() {
+  const [keyword, setKeyword] = useState("");
+  const { data, loading, error, refetch } = useQuery<{
+    fetchTravelproducts: Travelproduct[];
+  }>(FETCH_TRAVELPRODUCTS, {
+    variables: { page: 1, search: "" },
+    ssr: false,
+  });
+
+  const products = data?.fetchTravelproducts ?? [];
+  // 목록 API 결과 중 앞의 두 상품을 큰 추천 카드에도 재사용해요.
+  const featuredProducts = products.slice(0, 2);
+
+  const onSubmitSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    refetch({ page: 1, search: keyword });
+  };
+
   return (
     <main>
-      {/* 메인 페이지와 같은 배너를 재사용하되, 이 페이지에선 글자 숨김 */}
+      {/* 메인 페이지와 같은 배너를 재사용하되, 이 페이지에서는 글자를 숨겨요. */}
       <HeroBanner showText={false} />
 
       <div className={styles.page}>
@@ -61,13 +64,18 @@ export default function TravelProductsPage() {
 
           <div className={styles.featureList}>
             {featuredProducts.map((product) => (
-              <article className={styles.featureCard} key={product.id}>
+              <Link
+                className={styles.featureCard}
+                href={`/travelproducts/${product._id}`}
+                key={product._id}
+              >
                 <Image
                   className={styles.featureImage}
-                  src={product.image}
-                  alt={product.title}
+                  src={getImageUrl(product.images)}
+                  alt={product.name}
                   width={628}
                   height={628}
+                  unoptimized
                 />
 
                 <div className={styles.featureBookmark}>
@@ -77,16 +85,18 @@ export default function TravelProductsPage() {
                     width={24}
                     height={24}
                   />
-                  <span>24</span>
+                  <span>{product.pickedCount}</span>
                 </div>
 
                 <div className={styles.featureText}>
-                  <strong>{product.title}</strong>
-                  <p>{product.description}</p>
-                  <b>32,900 원</b>
+                  <strong>{product.name}</strong>
+                  <p>{product.remarks}</p>
+                  <b>{product.price.toLocaleString()} 원</b>
                 </div>
-              </article>
+              </Link>
             ))}
+
+            {loading && <p>추천 숙박권을 불러오고 있어요...</p>}
 
             <button
               className={styles.nextButton}
@@ -116,7 +126,7 @@ export default function TravelProductsPage() {
             <button type="button">예약 마감 숙소</button>
           </div>
 
-          <div className={styles.toolbar}>
+          <form className={styles.toolbar} onSubmit={onSubmitSearch}>
             <div className={styles.dateBox}>
               <Image src="/icons/calendar.svg" alt="" width={24} height={24} />
               <span>YYYY. MM. DD - YYYY. MM. DD</span>
@@ -124,18 +134,23 @@ export default function TravelProductsPage() {
 
             <label className={styles.searchBox}>
               <Image src="/icons/search.svg" alt="" width={24} height={24} />
-              <input type="text" placeholder="제목을 검색해 주세요." />
+              <input
+                type="text"
+                value={keyword}
+                onChange={(event) => setKeyword(event.target.value)}
+                placeholder="제목을 검색해 주세요."
+              />
             </label>
 
-            <button className={styles.searchButton} type="button">
+            <button className={styles.searchButton} type="submit">
               검색
             </button>
 
-            <Link href="/travelproducts/new" className={styles.sellButton}>
+            <Link className={styles.sellButton} href="/travelproducts/new">
               <Image src="/icons/rwite.svg" alt="" width={20} height={20} />
               숙박권 판매하기
             </Link>
-          </div>
+          </form>
 
           <div className={styles.categoryList}>
             {categories.map((category) => (
@@ -151,23 +166,25 @@ export default function TravelProductsPage() {
           </div>
 
           <div className={styles.productList} id="product-list">
+            {loading && <p>숙박권을 불러오고 있어요...</p>}
+            {error && <p>숙박권 API 연결을 확인해 주세요.</p>}
             {products.map((product) => (
-              <Link href={`/travelproducts/${product.id}`} key={product.id}>
-                <ProductCard
-                  image={product.image}
-                  title="강동 캠퍼스에서 쉬어가세요"
-                  description="편안한 클라스룸에서 코딩의 피로를 풀어 보세요."
-                  tag="#7인 이하 #코딩 #캠퍼스 #리프레시 가능"
-                  writer={product.writer}
-                  price="33,000 원"
-                />
-              </Link>
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                image={getImageUrl(product.images)}
+                title={product.name}
+                description={product.remarks}
+                tag={product.tags?.join(" ") ?? ""}
+                writer={product.seller?.name ?? "판매자"}
+                price={`${product.price.toLocaleString()} 원`}
+              />
             ))}
           </div>
         </section>
       </div>
 
-      {/* 오른쪽 하단의 '최근 본 상품' */}
+      {/* 오른쪽 하단의 '최근 본 상품'. */}
       <aside className={styles.recentProducts}>
         <strong>최근 본 상품</strong>
         <Image src="/images/b.png" alt="최근 본 숙소" width={70} height={70} />

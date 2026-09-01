@@ -1,0 +1,207 @@
+.section {
+  margin-top: 70px;
+  padding-top: 30px;
+  border-top: 1px solid #eeeeee;
+}
+
+.section h2 {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.form {
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.formTop {
+  display: flex;
+  padding: 18px 20px 12px;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.formTop label {
+  display: flex;
+  width: 190px;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.formTop label span {
+  color: #ff6666;
+}
+
+.formTop input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  outline: 0;
+}
+
+.rating {
+  display: flex;
+  height: 40px;
+  align-items: center;
+}
+
+.rating button {
+  padding: 2px;
+  border: 0;
+  color: #dddddd;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.rating .selectedStar {
+  color: #ffc400;
+}
+
+.form textarea {
+  width: calc(100% - 40px);
+  height: 90px;
+  margin: 0 20px;
+  padding: 13px;
+  border: 1px solid #eeeeee;
+  border-radius: 7px;
+  outline: 0;
+  resize: none;
+  font: inherit;
+}
+
+.formBottom {
+  display: flex;
+  padding: 10px 20px 18px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  color: #aaaaaa;
+  font-size: 12px;
+}
+
+.formBottom button {
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #111111;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.commentList {
+  margin-top: 26px;
+}
+
+.comment {
+  display: flex;
+  padding: 20px 8px;
+  gap: 12px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.avatar {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f1f1f1;
+}
+
+.commentBody {
+  flex: 1;
+}
+
+.commentTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.commentTop span {
+  color: #ffc400;
+  font-size: 13px;
+}
+
+.commentTop button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.commentTop .editButton {
+  margin-left: auto;
+}
+
+.commentBody p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.editArea textarea {
+  width: 100%;
+  height: 70px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  outline: 0;
+  resize: none;
+}
+
+.editArea > div {
+  display: flex;
+  margin: 8px 0;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.editArea button {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+}
+
+.editArea button:last-child {
+  border-color: #111111;
+  color: white;
+  background: #111111;
+}
+
+.commentBody time,
+.empty {
+  color: #aaaaaa;
+  font-size: 12px;
+}
+
+.empty {
+  padding: 28px;
+  text-align: center;
+}
+
+@media (max-width: 650px) {
+  .formTop {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .formTop label {
+    width: 100%;
+  }
+}

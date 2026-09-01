@@ -1,529 +1,452 @@
-.container {
-  width: 100%;
-  max-width: 1280px;
+.article {
+  width: min(calc(100% - 40px), 1280px);
   margin: 0 auto;
-  padding: 40px 20px 100px;
+  padding: 60px 0 120px;
 }
 
-/* 상단 헤더 */
-.header {
+.topRow {
   display: flex;
-  justify-content: space-between;
+  margin-bottom: 26px;
   align-items: flex-start;
-  margin-bottom: 24px;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.titleArea {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.title {
+.topRow h1 {
+  margin: 0 0 8px;
   font-size: 24px;
-  font-weight: 700;
-  color: #111111;
-  margin: 0;
+  letter-spacing: -0.6px;
 }
 
 .subtitle {
+  margin: 0 0 8px;
+  color: #888888;
   font-size: 14px;
-  color: #777777;
-  margin: 0;
 }
 
 .tags {
-  display: flex;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--blue, #2878ee);
-}
-
-.iconGroup {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.iconBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bookmarkBadge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background-color: #9e9e9e;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
+  margin: 0;
+  color: #2878ef;
   font-size: 13px;
-  font-weight: 600;
+}
+
+.metaIcons {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 14px;
+  color: #999999;
+  font-size: 12px;
+}
+
+.metaIcons button {
+  display: flex;
+  border: 0;
+  background: transparent;
   cursor: pointer;
 }
 
-.activeBookmark {
-  background-color: var(--blue, #2878ee);
+.dateBadge {
+  display: flex;
+  height: 26px;
+  padding: 0 10px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  color: #333333;
+  background: #d9d9d9;
+  font-weight: 600;
 }
 
-/* 메인 갤러리 + 사이드바 */
-.mainSection {
+.dateBadge img {
+  filter: brightness(0) invert(1);
+}
+
+.mainRow {
   display: flex;
-  gap: 28px;
-  margin-bottom: 40px;
+  margin-bottom: 46px;
+  gap: 24px;
 }
 
 .gallery {
-  flex: 1;
   display: flex;
-  gap: 16px;
+  gap: 24px;
+}
+
+.mainImage {
+  width: 640px;
   height: 480px;
-}
-
-.mainImageWrapper {
-  flex: 2;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.mainImageWrapper img {
-  width: 100%;
-  height: 100%;
+  flex-shrink: 0;
+  border-radius: 8px;
   object-fit: cover;
 }
 
 .thumbList {
-  flex: 1;
   display: flex;
+  width: 180px;
+  flex-shrink: 0;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .thumbList img {
-  width: 100%;
-  height: calc((100% - 24px) / 3);
-  object-fit: cover;
+  width: 180px;
+  height: 136px;
   border-radius: 8px;
+  object-fit: cover;
 }
 
-/* 사이드바 */
 .sidebar {
-  width: 320px;
   display: flex;
+  width: 412px;
+  height: 356px;
   flex-direction: column;
-  gap: 16px;
+  flex-shrink: 0;
+  gap: 14px;
 }
 
-.priceCard {
-  background-color: #ffffff;
-  border: 1px solid #f0f0f0;
+.priceBox {
+  flex: 1;
+  padding: 22px;
   border-radius: 12px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
-.price {
-  font-size: 24px;
-  font-weight: 700;
-  color: #111111;
+.priceBox strong {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 22px;
 }
 
-.noticeList {
-  margin: 0;
+.priceBox ul {
+  margin: 0 0 18px;
   padding-left: 16px;
+  color: #999999;
   font-size: 12px;
-  color: #777777;
   line-height: 1.6;
 }
 
 .buyButton {
   width: 100%;
-  height: 48px;
-  background-color: var(--blue, #2878ee);
+  height: 46px;
+  border: 0;
+  border-radius: 8px;
   color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.buyButton:hover {
-  background-color: #1d65d4;
-}
-
-.sellerCard {
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.sellerLabel {
-  font-size: 14px;
-  font-weight: 700;
-  color: #111111;
-}
-
-.sellerProfile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.sellerAvatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.sellerAvatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.sellerName {
+  background: #2878ef;
   font-size: 15px;
-  font-weight: 600;
-  color: #111111;
-}
-
-/* 섹션 공통 */
-.divider {
-  border: none;
-  border-top: 1px solid #f0f0f0;
-  margin: 32px 0;
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.sectionTitle {
-  font-size: 18px;
   font-weight: 700;
-  color: #111111;
-  margin: 0;
-}
-
-.description {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  font-size: 14px;
-  color: #333333;
-  line-height: 1.7;
-}
-.description p {
-  margin: 0;
-}
-/* 지도 영역 */
-.mapBox {
-  width: 100%;
-  height: 280px;
-  background-color: #f0f0f0;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.mapPlaceholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 600;
-  color: #555555;
-  background: #e9ecef;
-}
-
-/* 문의하기 */
-.commentHeader {
-  font-size: 15px;
-  font-weight: 600;
-  color: #111111;
-}
-
-.commentBox {
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: #ffffff;
-}
-
-.commentTextarea {
-  width: 100%;
-  height: 80px;
-  border: none;
-  outline: none;
-  resize: none;
-  font-size: 14px;
-  font-family: inherit;
-}
-
-.commentTextarea::placeholder {
-  color: #9e9e9e;
-}
-
-.commentBottom {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.charCount {
-  font-size: 12px;
-  color: #9e9e9e;
-}
-
-.commentButtonWrapper {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 기본 상태: 비활성화(회색) */
-.commentSubmitButton {
-  padding: 12px 24px;
-  background-color: #bdbdbd;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: not-allowed;
-  transition: background-color 0.15s ease;
-}
-/* 활성화 상태: 검은색 */
-.commentSubmitButton.active {
-  background-color: #111111;
   cursor: pointer;
 }
 
-/* 댓글 목록 섹션 */
-.commentListSection {
-  display: flex;
-  flex-direction: column;
-  margin-top: 40px;
+.sellerBox {
+  padding: 18px 22px;
+  border-radius: 12px;
+  background: #f0f0f0;
 }
 
-.commentItemWrapper {
-  display: flex;
-  flex-direction: column;
+.sellerBox strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
 }
 
-.commentCard {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px 0;
-}
-
-.commentUser {
+.seller {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 14px;
 }
 
 .avatar {
-  width: 24px;
-  height: 24px;
+  display: flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: 50%;
-  overflow: hidden;
+  background: #f0f0f0;
+  font-size: 14px;
+}
+
+.section {
+  padding: 30px 0;
+  border-top: 1px solid #eeeeee;
+}
+
+.section h2 {
+  margin: 0 0 20px;
+  font-size: 16px;
+}
+
+.description {
+  margin: 0;
+  color: #444444;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.mapBox {
   display: flex;
+  min-height: 230px;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0;
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.commentUserName {
-  font-size: 14px;
-  font-weight: 600;
-  color: #111111;
-}
-
-.commentContent {
-  font-size: 14px;
-  color: #333333;
-  line-height: 1.6;
-  white-space: pre-line;
-  margin: 4px 0;
-}
-
-.commentDate {
-  font-size: 12px;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 12px;
   color: #999999;
+  background: #f2f2f2;
+  font-size: 13px;
 }
 
-/* 답변 하기 버튼 */
-.replyButton {
-  display: inline-flex;
+.addressText {
+  display: flex;
+  margin: 0 0 12px;
   align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
+  gap: 8px;
+  color: #555555;
+  font-size: 14px;
+}
+
+.mapFrame {
+  width: 100%;
+  height: 360px;
+  border: 0;
+  border-radius: 12px;
+}
+
+.privateCheck {
+  display: flex;
+  margin-bottom: 14px;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.inquiryBox {
+  position: relative;
+}
+
+.inquiryBox textarea {
+  width: 100%;
+  height: 90px;
+  padding: 14px 16px 24px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  outline: 0;
+  resize: none;
+  font-size: 13px;
+}
+
+.inquiryBox textarea:focus {
+  border-color: #2878ef;
+}
+
+.charCount {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  color: #bbbbbb;
   font-size: 12px;
-  font-weight: 500;
-  color: #666666;
-  cursor: pointer;
-  padding: 4px 0;
-  align-self: flex-start;
 }
 
-.replyButton:hover {
-  color: #111111;
-}
-
-/* 대댓글(답변) 영역 */
-.repliesList {
+.inquiryButtonRow {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-left: 24px;
-  margin-top: 12px;
-}
-
-.replyCard {
-  display: flex;
-  gap: 12px;
-}
-
-.replyArrow {
-  font-size: 18px;
-  color: #666666;
-  line-height: 1;
-}
-
-.replyBody {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.replyHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.replyActions {
-  display: flex;
-  gap: 8px;
-}
-
-.actionBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-}
-
-.actionBtn:hover {
-  opacity: 1;
-}
-
-/* 대댓글 입력 폼 */
-.replyFormBox {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 16px;
-  padding-left: 24px;
-}
-
-.replyButtonGroup {
-  display: flex;
+  margin: 12px 0 30px;
   justify-content: flex-end;
-  gap: 8px;
 }
 
-.cancelBtn {
-  padding: 10px 20px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+.inquiryButton {
+  width: 96px;
+  height: 42px;
+  border: 0;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #333333;
+  color: #ffffff;
+  background: #111111;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.submitBtn {
-  padding: 10px 20px;
-  background-color: #bdbdbd;
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
+.inquiryButton:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.submitBtn.active {
-  background-color: #000000;
+.emptyState {
+  padding: 40px 0;
+  color: #999999;
+  text-align: center;
+  font-size: 14px;
+}
+
+.commentList,
+.replyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.comment {
+  padding: 20px 0;
+  border-top: 1px solid #eeeeee;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.commentHeader strong {
+  font-size: 13px;
+}
+
+.commentContent {
+  margin: 10px 0 8px;
+  padding-left: 36px;
+  color: #444444;
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.commentFooter {
+  display: flex;
+  padding-left: 36px;
+  align-items: center;
+  gap: 12px;
+}
+
+.commentFooter time {
+  color: #aaaaaa;
+  font-size: 14px;
+}
+
+.commentFooter button {
+  border: 0;
+  background: transparent;
+  color: #777777;
+  font-size: 12px;
   cursor: pointer;
 }
 
-/* 댓글 간 구분선 */
-.commentDivider {
-  border: none;
-  border-top: 1px solid #f2f2f2;
-  margin: 20px 0;
-}
-
-/* 수정 모드 박스 */
-.editBox {
+.replyIcons {
   display: flex;
-  flex-direction: column;
+  margin-left: auto;
   gap: 8px;
-  margin-top: 6px;
-  border: 1px solid #e5e5e5;
+}
+
+.replyIcons button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.replyList {
+  margin: 14px 0 0 36px;
+}
+
+.reply {
+  position: relative;
+  padding-left: 32px;
+}
+
+.reply::before {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: url("/icons/return.svg") center / contain no-repeat;
+  content: "";
+}
+
+.reply time {
+  display: block;
+  margin: 8px 0 0 36px;
+  color: #aaaaaa;
+  font-size: 14px;
+}
+
+.reply + .reply {
+  margin-top: 16px;
+}
+
+.replyForm,
+.reply textarea {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.replyForm textarea,
+.reply textarea {
+  width: 100%;
+  height: 70px;
+  padding: 10px 14px;
+  border: 1px solid #dddddd;
   border-radius: 8px;
-  padding: 12px;
-  background-color: #ffffff;
+  outline: 0;
+  resize: none;
+  font-size: 13px;
 }
 
-.editButtonGroup {
+.replyForm {
+  padding-left: 36px;
+}
+
+.replyOpenRow {
   display: flex;
-  justify-content: flex-end;
-  gap: 6px;
+  margin-top: 12px;
+  padding-left: 36px;
+  justify-content: flex-start;
 }
 
-@media (max-width: 900px) {
-  .mainSection {
+.replyOpenRow button {
+  display: flex;
+  height: 24px;
+  padding: 0;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: #555555;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.replyButtonRow {
+  display: flex;
+  margin-top: 8px;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.replyButtonRow button {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* .replyButtonRow button보다 구체적으로 써서 검정 버튼 스타일이 이기게 해요. */
+.replyButtonRow .primaryButton {
+  border: 0;
+  color: #ffffff;
+  background: #111111;
+}
+
+@media (max-width: 760px) {
+  .mainRow {
     flex-direction: column;
   }
-  .gallery {
-    height: 360px;
-  }
+
   .sidebar {
     width: 100%;
   }

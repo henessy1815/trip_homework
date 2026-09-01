@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
+
 import styles from "./styles.module.css";
 
-// 상품 카드가 받아야하는 값들의 타입
+// 상품 카드가 받아야 하는 값들의 타입이에요.
 type ProductCardProps = {
+  id: string;
   image: string;
   title: string;
   description: string;
@@ -15,6 +18,7 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({
+  id,
   image,
   title,
   description,
@@ -22,25 +26,20 @@ export default function ProductCard({
   writer,
   price,
 }: ProductCardProps) {
-  //아직 api는 연결하지 않았으므로 누른 카드의 북마크만 임시로 바꿈
+  // 북마크 API는 다음 수업에서 연결하므로 화면 토글만 먼저 유지해요.
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  const handleBookmark = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
   };
 
   return (
     <article className={styles.card}>
       <div className={styles.imageBox}>
-        <Image
-          className={styles.productImage}
-          src={image}
-          alt={title}
-          width={296}
-          height={296}
-        />
+        <Link href={`/travelproducts/${id}`}>
+          <img className={styles.productImage} src={image} alt={title} />
+        </Link>
+
         <button
           className={`${styles.bookmarkButton} ${isBookmarked ? styles.active : ""}`}
           type="button"
@@ -53,7 +52,7 @@ export default function ProductCard({
         </button>
       </div>
 
-      <div className={styles.textBox}>
+      <Link className={styles.textBox} href={`/travelproducts/${id}`}>
         <h3>{title}</h3>
         <p>{description}</p>
         <span className={styles.tag}>{tag}</span>
@@ -67,7 +66,7 @@ export default function ProductCard({
           </div>
           <strong>{price}</strong>
         </div>
-      </div>
+      </Link>
     </article>
   );
 }

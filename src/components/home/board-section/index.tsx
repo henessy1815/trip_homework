@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { FETCH_BOARDS } from "@/graphql/queries";
+import { FETCH_BOARDS, FETCH_BOARDS_OF_THE_BEST } from "@/graphql/queries";
 import type { Board } from "@/types/board";
 import styles from "./styles.module.css";
 
@@ -29,9 +29,13 @@ export default function BoardSection() {
     },
   );
 
+  const { data: bestData } = useQuery<{ fetchBoardsOfTheBest: Board[] }>(
+    FETCH_BOARDS_OF_THE_BEST,
+    { ssr: false },
+  );
+
   const boards = data?.fetchBoards ?? [];
-  // 같은 게시글 목록에서 앞의 4개만 골라 위쪽 카드에 사용해요.
-  const hotBoards = boards.slice(0, 4);
+  const hotBoards = bestData?.fetchBoardsOfTheBest.slice(0, 4) ?? [];
   const displayedBoards = boards.slice(0, 10);
 
   const onSubmitSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -57,7 +61,13 @@ export default function BoardSection() {
             >
               <img
                 className={styles.cardImage}
-                src={CARD_IMAGES[index]}
+                src={
+                  board.images?.[0]
+                    ? board.images[0].startsWith("http")
+                      ? board.images[0]
+                      : `http://storage.googleapis.com/${board.images[0]}`
+                    : CARD_IMAGES[index]
+                }
                 alt="여행지"
               />
 
@@ -125,7 +135,7 @@ export default function BoardSection() {
             </button>
           </form>
 
-          {/* 등록 화면의 기능은 없지만, 빈 페이지로 이동하는 것부터 연습해요. */}
+          {/* 등록 화면 */}
           <Link className={styles.writeButton} href="/boards/new">
             <Image
               className={styles.writeIcon}
