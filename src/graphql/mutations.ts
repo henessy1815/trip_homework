@@ -107,3 +107,35 @@ export const DELETE_TRAVELPRODUCT_QUESTION_ANSWER = gql`
     deleteTravelproductQuestionAnswer(travelproductQuestionAnswerId: $answerId)
   }
 `;
+
+export const CREATE_TRAVELPRODUCT = gql`
+  mutation CreateTravelproduct($input: CreateTravelproductInput!) {
+    createTravelproduct(createTravelproductInput: $input) {
+      _id
+      name
+      remarks
+      contents
+      price
+      tags
+      images
+      pickedCount
+      soldAt
+      createdAt
+      seller {
+        _id
+        name
+      }
+      travelproductAddress {
+        zipcode
+        address
+        addressDetail
+        lat
+        lng
+      }
+      buyer {
+        _id
+        name
+      }
+    }
+  }
+`;

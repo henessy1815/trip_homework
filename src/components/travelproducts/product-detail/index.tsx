@@ -322,7 +322,12 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
 
       <section className={styles.section}>
         <h2>상세 설명</h2>
-        <p className={styles.description}>{removeHtmlTags(product.contents)}</p>
+        <div
+          className={styles.description}
+          dangerouslySetInnerHTML={{
+            __html: product.contents ?? "등록된 상세 설명이 없어요.",
+          }}
+        />
       </section>
 
       <section className={styles.section}>

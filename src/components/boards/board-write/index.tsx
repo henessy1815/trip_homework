@@ -1,7 +1,18 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Script from "next/script";
 import styles from "./styles.module.css";
+
+type DaumPostcode = new (options: {
+  oncomplete: (data: { address: string; zonecode: string }) => void;
+}) => { open: () => void };
+
+declare global {
+  interface Window {
+    daum?: { Postcode: DaumPostcode };
+  }
+}
 
 export default function BoardWrite() {
   // 1. 입력 필드 상태 관리
@@ -13,6 +24,24 @@ export default function BoardWrite() {
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
+
+  // 주소 검색 팝업 열기
+  const onClickAddressSearch = () => {
+    const Postcode = window.daum?.Postcode;
+    if (!Postcode) {
+      alert(
+        "주소 검색 스크립트를 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+      );
+      return;
+    }
+
+    new Postcode({
+      oncomplete: (data: { address: string; zonecode: string }) => {
+        setAddress(data.address);
+        setZipcode(data.zonecode);
+      },
+    }).open();
+  };
 
   // 2. 이미지 3개 상태 (미리보기 URL 문자열 또는 null)
   const [images, setImages] = useState<(string | null)[]>([null, null, null]);
@@ -75,6 +104,7 @@ export default function BoardWrite() {
 
   return (
     <div className={styles.container}>
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
       <h1 className={styles.pageTitle}>게시물 등록</h1>
 
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -150,7 +180,11 @@ export default function BoardWrite() {
               value={zipcode}
               readOnly
             />
-            <button type="button" className={styles.zipcodeButton}>
+            <button
+              type="button"
+              className={styles.zipcodeButton}
+              onClick={onClickAddressSearch}
+            >
               우편번호 검색
             </button>
           </div>
