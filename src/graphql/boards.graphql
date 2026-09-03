@@ -1,0 +1,12 @@
+query FetchBoardsWithSearch($page: Int, $search: String) {
+  # 특정 페이지의 게시글 목록
+  fetchBoards(page: $page, search: $search) {
+    _id
+    writer
+    title
+    createdAt
+  }
+
+  # 검색 조건에 맞는 전체 게시글 개수 (페이지네이션 계산용)
+  fetchBoardsCount(search: $search)
+}

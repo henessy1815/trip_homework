@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { FETCH_BOARDS, FETCH_BOARDS_OF_THE_BEST } from "@/graphql/queries";
+import { FETCH_BOARDS_OF_THE_BEST } from "@/graphql/queries";
+import { FetchBoardsWithSearchDocument } from "@/gql/graphql";
 import type { Board } from "@/types/board";
 import styles from "./styles.module.css";
 
@@ -20,8 +21,10 @@ const formatDate = (date: string) => date.slice(0, 10).replaceAll("-", ".");
 
 export default function BoardSection() {
   const [keyword, setKeyword] = useState("");
-  const { data, loading, error, refetch } = useQuery<{ fetchBoards: Board[] }>(
-    FETCH_BOARDS,
+  const [currentPage, setCurrentPage] = useState(1); // 현재 선택된 페이지
+  const [startPage, setStartPage] = useState(1); // 페이지 번호 묶음 시작(1, 11, 21...)
+  const { data, loading, error, refetch } = useQuery(
+    FetchBoardsWithSearchDocument,
     {
       variables: { page: 1, search: "" },
       // 이 Query는 브라우저 화면이 열린 뒤 실행해요.
@@ -36,10 +39,40 @@ export default function BoardSection() {
 
   const boards = data?.fetchBoards ?? [];
   const hotBoards = bestData?.fetchBoardsOfTheBest.slice(0, 4) ?? [];
-  const displayedBoards = boards.slice(0, 10);
+  const totalCount = data?.fetchBoardsCount ?? 0;
 
+  // 전체 페이지 수 계산(한 페이지 당 10개씩)
+  const lastPage = Math.ceil(totalCount / 10) || 1;
+
+  // 특정 페이지 번호 클릭
+  const onClickPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    refetch({ page: pageNumber, search: keyword });
+  };
+
+  // 이전 10페이지 묶음 이동 (<)
+  const onClickPrevPage = () => {
+    if (startPage === 1) return;
+    const prevStart = startPage - 10;
+    setStartPage(prevStart);
+    setCurrentPage(prevStart);
+    refetch({ page: prevStart, search: keyword });
+  };
+
+  // 다음 10페이지 묶음 이동 (>)
+  const onClickNextPage = () => {
+    if (startPage + 10 > lastPage) return;
+    const nextStart = startPage + 10;
+    setStartPage(nextStart);
+    setCurrentPage(nextStart);
+    refetch({ page: nextStart, search: keyword });
+  };
+
+  // 검색 실행 시 1페이지로 리셋
   const onSubmitSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setCurrentPage(1);
+    setStartPage(1);
     refetch({ page: 1, search: keyword });
   };
 
@@ -157,9 +190,12 @@ export default function BoardSection() {
             <span className={styles.deleteSpace} />
           </div>
 
-          {displayedBoards.map((board, index) => (
+          {boards.map((board, index) => (
             <div className={styles.row} key={board._id}>
-              <span className={styles.number}>{243 - index}</span>
+              {/* 전체 개수 기준 내림차순 번호 부여 */}
+              <span className={styles.number}>
+                {totalCount - ((currentPage - 1) * 10 + index)}
+              </span>
               <Link className={styles.titleCell} href={`/boards/${board._id}`}>
                 {board.title}
               </Link>
@@ -182,15 +218,45 @@ export default function BoardSection() {
           ))}
 
           <div className={styles.pagination}>
-            <button type="button">‹</button>
-            <button className={styles.selected} type="button">
-              1
+            {/* 이전 묶음 버튼 */}
+            <button
+              type="button"
+              onClick={onClickPrevPage}
+              disabled={startPage === 1}
+              style={{ cursor: startPage === 1 ? "default" : "pointer" }}
+            >
+              ‹
             </button>
-            <button type="button">2</button>
-            <button type="button">3</button>
-            <button type="button">4</button>
-            <button type="button">5</button>
-            <button type="button">›</button>
+            {/* 10개 단위 페이지 번호 버튼 */}
+            {Array.from({ length: 10 }).map((_, index) => {
+              const pageNum = startPage + index;
+              if (pageNum > lastPage) return null;
+              // 마지막 페이지를 넘어가면 숨김
+
+              return (
+                <button
+                  key={pageNum}
+                  type="button"
+                  className={currentPage === pageNum ? styles.selected : ""}
+                  onClick={() => onClickPage(pageNum)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+
+            {/* 다음 묶음 버튼 */}
+            <button
+              type="button"
+              onClick={onClickNextPage}
+              disabled={startPage + 10 > lastPage}
+              style={{
+                cursor: startPage + 10 > lastPage ? "default" : "pointer",
+              }}
+            >
+              ›
+            </button>
           </div>
         </div>
       </div>

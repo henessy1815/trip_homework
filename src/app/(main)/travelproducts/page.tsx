@@ -8,8 +8,7 @@ import type { FormEvent } from "react";
 
 import HeroBanner from "@/components/home/hero-banner";
 import ProductCard from "@/components/travelproducts/product-card";
-import { FETCH_TRAVELPRODUCTS } from "@/graphql/queries";
-import type { Travelproduct } from "@/types/travelproduct";
+import { FetchTravelproductsDocument } from "@/gql/graphql"; // codegen 도큐먼트
 
 import styles from "./styles.module.css";
 
@@ -35,20 +34,40 @@ const getImageUrl = (images?: string[]) => {
 
 export default function TravelProductsPage() {
   const [keyword, setKeyword] = useState("");
-  const { data, loading, error, refetch } = useQuery<{
-    fetchTravelproducts: Travelproduct[];
-  }>(FETCH_TRAVELPRODUCTS, {
-    variables: { page: 1, search: "" },
-    ssr: false,
-  });
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isSoldout, setIsSoldout] = useState(false);
+
+  // codegen 도큐먼트를 useQuery에 바로 전달(자동으로 타입 추론)
+  const { data, loading, error, refetch } = useQuery(
+    FetchTravelproductsDocument,
+    {
+      variables: { page: 1, search: "", isSoldout: false },
+      ssr: false,
+    },
+  );
 
   const products = data?.fetchTravelproducts ?? [];
   // 목록 API 결과 중 앞의 두 상품을 큰 추천 카드에도 재사용해요.
   const featuredProducts = products.slice(0, 2);
 
+  // 검색창 제출 이벤트
   const onSubmitSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    refetch({ page: 1, search: keyword });
+    refetch({ page: 1, search: keyword, isSoldout });
+  };
+
+  // 카테고리 클릭 이벤트(토글 방식)
+  const onClickCategory = (categoryName: string) => {
+    const nextCategory = selectedCategory === categoryName ? "" : categoryName;
+    setSelectedCategory(nextCategory);
+    setKeyword(nextCategory);
+    refetch({ page: 1, search: nextCategory, isSoldout });
+  };
+
+  // 탭 전환(예약 가능 숙소 / 예약 마감 숙소)
+  const onClickTab = (soldout: boolean) => {
+    setIsSoldout(soldout);
+    refetch({ page: 1, search: keyword, isSoldout: soldout });
   };
 
   return (
@@ -71,7 +90,7 @@ export default function TravelProductsPage() {
               >
                 <Image
                   className={styles.featureImage}
-                  src={getImageUrl(product.images)}
+                  src={getImageUrl(product.images ?? undefined)}
                   alt={product.name}
                   width={628}
                   height={628}
@@ -91,7 +110,7 @@ export default function TravelProductsPage() {
                 <div className={styles.featureText}>
                   <strong>{product.name}</strong>
                   <p>{product.remarks}</p>
-                  <b>{product.price.toLocaleString()} 원</b>
+                  <b>{(product.price ?? 0).toLocaleString()} 원</b>
                 </div>
               </Link>
             ))}
@@ -120,10 +139,20 @@ export default function TravelProductsPage() {
           <h2>여기에서만 예약할 수 있는 숙소</h2>
 
           <div className={styles.tabs}>
-            <button className={styles.activeTab} type="button">
+            <button
+              className={!isSoldout ? styles.activeTab : ""}
+              type="button"
+              onClick={() => onClickTab(false)}
+            >
               예약 가능 숙소
             </button>
-            <button type="button">예약 마감 숙소</button>
+            <button
+              className={isSoldout ? styles.activeTab : ""}
+              type="button"
+              onClick={() => onClickTab(true)}
+            >
+              예약 마감 숙소
+            </button>
           </div>
 
           <form className={styles.toolbar} onSubmit={onSubmitSearch}>
@@ -155,9 +184,10 @@ export default function TravelProductsPage() {
           <div className={styles.categoryList}>
             {categories.map((category) => (
               <button
-                className={styles.category}
+                className={`${styles.category} ${selectedCategory === category.name ? styles.selectedCategory : ""}`}
                 type="button"
                 key={category.name}
+                onClick={() => onClickCategory(category.name)}
               >
                 <Image src={category.icon} alt="" width={40} height={40} />
                 <span>{category.name}</span>
@@ -172,12 +202,13 @@ export default function TravelProductsPage() {
               <ProductCard
                 key={product._id}
                 id={product._id}
-                image={getImageUrl(product.images)}
+                image={getImageUrl(product.images ?? undefined)}
                 title={product.name}
                 description={product.remarks}
                 tag={product.tags?.join(" ") ?? ""}
                 writer={product.seller?.name ?? "판매자"}
-                price={`${product.price.toLocaleString()} 원`}
+                price={`${(product.price ?? 0).toLocaleString()} 원`}
+                pickedCount={product.pickedCount ?? 0} // 실제 서버의 북마크 수 전달
               />
             ))}
           </div>

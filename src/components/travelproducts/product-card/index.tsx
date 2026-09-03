@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { getAccessToken } from "@/lib/auth";
 
 import styles from "./styles.module.css";
 
@@ -15,6 +17,7 @@ type ProductCardProps = {
   tag: string;
   writer: string;
   price: string;
+  pickedCount?: number;
 };
 
 export default function ProductCard({
@@ -25,12 +28,32 @@ export default function ProductCard({
   tag,
   writer,
   price,
+  pickedCount = 0,
 }: ProductCardProps) {
   // 북마크 API는 다음 수업에서 연결하므로 화면 토글만 먼저 유지해요.
+  const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [count, setCount] = useState(pickedCount);
 
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const token = getAccessToken();
+    if (!token) {
+      alert("로그인 후 이용 가능한 서비스입니다.");
+      router.push("/login");
+      return;
+    }
+
+    // 로그인된 경우에만 북마크 토글 및 숫자 증감
+    if (isBookmarked) {
+      setIsBookmarked(false);
+      setCount((prev) => Math.max(0, prev - 1));
+    } else {
+      setIsBookmarked(true);
+      setCount((prev) => prev + 1);
+    }
   };
 
   return (
@@ -48,7 +71,7 @@ export default function ProductCard({
           aria-pressed={isBookmarked}
         >
           <Image src="/icons/bookmark.svg" alt="" width={22} height={22} />
-          <span>24</span>
+          <span>{count}</span>
         </button>
       </div>
 

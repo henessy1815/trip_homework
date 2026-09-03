@@ -219,9 +219,20 @@
   font-size: 14px;
 }
 
+.selectedCategory {
+  color: #2878ee;
+  font-weight: 700;
+}
+
 .category img {
   width: 40px;
   height: 40px;
+}
+
+.selectedCategory img {
+  /* 검은색 SVG 아이콘을 #2878ee 파란색으로 변환하는 필터 */
+  filter: invert(38%) sepia(85%) saturate(1900%) hue-rotate(205deg)
+    brightness(98%) contrast(96%);
 }
 
 .productList {
