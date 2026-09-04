@@ -34,9 +34,18 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// 토큰 재발급 응답 타입 정의 추가
+type RestoreAccessTokenResult = {
+  restoreAccessToken: {
+    accessToken: string;
+  };
+};
+
 // 새로고침 시 refresh token 쿠키로 access token을 복구하는 내부 컴포넌트
 function AuthRestore({ children }: { children: ReactNode }) {
-  const [restoreAccessToken] = useMutation(RESTORE_ACCESS_TOKEN);
+  // useMutation 뒤에 <RestoreAccessTokenResult> 제네릭 타입 붙이기
+  const [restoreAccessToken] =
+    useMutation<RestoreAccessTokenResult>(RESTORE_ACCESS_TOKEN);
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const finishAuth = useAuthStore((state) => state.finishAuth);
 
