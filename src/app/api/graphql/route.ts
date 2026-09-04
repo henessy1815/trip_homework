@@ -32,7 +32,13 @@ export async function POST(request: NextRequest) {
 
     // 로그인 API가 보낸 refresh token 쿠키도 브라우저에 전달해요.
     const setCookie = apiResponse.headers.get("set-cookie");
-    if (setCookie) result.headers.set("set-cookie", setCookie);
+    if (setCookie) {
+      const localCookie = setCookie
+        .replace(/domain=[^;]+;?/gi, "")
+        .replace(/SameSite=None/gi, "SameSite=Lax")
+        .replace(/Secure;?/gi, "");
+      result.headers.set("set-cookie", localCookie);
+    }
 
     return result;
   } catch {

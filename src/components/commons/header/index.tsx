@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FETCH_USER_LOGGED_IN } from "@/graphql/queries";
-import { getAccessToken, removeAccessToken } from "@/lib/auth";
+import { useAuthStore } from "@/store/auth-store";
 import type { User } from "@/types/user";
 import styles from "./styles.module.css";
 
@@ -21,49 +21,35 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // 서버에는 sessionStorage가 없으므로 처음에는 로그아웃 상태로 시작해요.
-  const [accessToken, setAccessToken] = useState("");
+  // isAuthReady 추가 가져오기
+  const isAuthReady = useAuthStore((state) => state.isAuthReady);
+  // Zustand Store에서 로그인 토큰과 로그아웃 함수 가져오기
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const logout = useAuthStore((state) => state.logout);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    // 화면이 브라우저에 나타난 다음 저장된 토큰을 확인해요.
-    // 이렇게 하면 서버 화면과 브라우저의 첫 화면이 달라지는 오류를 막을 수 있어요.
-    const frameId = requestAnimationFrame(() => {
-      const savedAccessToken = getAccessToken();
-      setAccessToken(savedAccessToken);
-    });
-
-    return () => cancelAnimationFrame(frameId);
-  }, []);
-
+  // 로그인 사용자 정보 조회
   const { data, error } = useQuery<{ fetchUserLoggedIn: User }>(
     FETCH_USER_LOGGED_IN,
     {
       skip: accessToken === "",
-      ssr: false,
       fetchPolicy: "no-cache",
     },
   );
 
+  // 토큰 오류 시 자동 로그아웃 처리
   useEffect(() => {
-    // 서버가 만료되거나 잘못된 토큰이라고 알려주면 로그아웃 상태로 바꿔요.
     if (!error) return;
-
-    removeAccessToken();
+    logout();
     void client.clearStore();
+  }, [client, error, logout]);
 
-    const frameId = requestAnimationFrame(() => {
-      setAccessToken("");
-    });
-
-    return () => cancelAnimationFrame(frameId);
-  }, [client, error]);
-
+  // 로그아웃 버튼 클릭 핸들러
   const onClickLogout = async () => {
-    // 저장했던 토큰과 Apollo에 남아 있는 로그인 정보를 함께 지워요.
-    removeAccessToken();
-    setAccessToken("");
-    await client.clearStore();
+    logout(); // Zustand Store 토큰 비우기
+    setIsMenuOpen(false);
+    await client.clearStore(); // Apollo 캐시 초기화
     router.push("/");
   };
 
@@ -98,7 +84,9 @@ export default function Header() {
           </Link>
         </nav>
 
-        {accessToken === "" ? (
+        {!isAuthReady ? (
+          <div style={{ width: 80 }} />
+        ) : accessToken === "" ? (
           <Link className={styles.loginButton} href="/login">
             로그인
             <Image

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAccessToken } from "@/lib/auth";
+import { useAuthStore } from "@/store/auth-store";
 
 import styles from "./styles.module.css";
 
@@ -30,8 +30,8 @@ export default function ProductCard({
   price,
   pickedCount = 0,
 }: ProductCardProps) {
-  // 북마크 API는 다음 수업에서 연결하므로 화면 토글만 먼저 유지해요.
   const router = useRouter();
+  const accessToken = useAuthStore((state) => state.accessToken);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [count, setCount] = useState(pickedCount);
 
@@ -39,8 +39,8 @@ export default function ProductCard({
     e.preventDefault();
     e.stopPropagation();
 
-    const token = getAccessToken();
-    if (!token) {
+    // Zustand 토큰으로 로그인 체크
+    if (!accessToken) {
       alert("로그인 후 이용 가능한 서비스입니다.");
       router.push("/login");
       return;

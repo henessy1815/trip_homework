@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { LOGIN_USER } from "@/graphql/mutations";
-import { saveAccessToken } from "@/lib/auth";
+import { useAuthStore } from "@/store/auth-store";
 import styles from "../auth.module.css";
 
 type LoginResult = {
@@ -17,6 +17,8 @@ type LoginResult = {
 
 export default function LoginPage() {
   const router = useRouter();
+  // Zustand의 토큰 저장 함수 가져오기
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,9 +39,8 @@ export default function LoginPage() {
 
       if (!accessToken) return;
 
-      // 토큰은 현재 탭을 닫으면 사라지는 sessionStorage에 저장해요.
-      // 실제 서비스에서는 이후 refresh token으로 로그인을 연장할 수 있어요.
-      saveAccessToken(accessToken);
+      // sessionStorage 대신 Zustand의 전역 store에 저장
+      setAccessToken(accessToken);
       router.replace("/");
     } catch (error) {
       setErrorMessage(
