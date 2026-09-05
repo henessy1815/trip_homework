@@ -9,7 +9,7 @@ import type { User } from "@/types/user";
 import styles from "./styles.module.css";
 
 const getProfileUrl = (picture?: string | null) => {
-  if (!picture) return "";
+  if (!picture) return "/icons/profile.svg";
   if (picture.startsWith("http") || picture.startsWith("/")) return picture;
   return `https://storage.googleapis.com/${picture}`;
 };
@@ -33,16 +33,14 @@ export default function UserInfo() {
 
       <div className={styles.profileRow}>
         <span className={styles.profileImage}>
-          {profileUrl ? (
-            <img src={profileUrl} alt="프로필" />
-          ) : (
-            <Image
-              src="/icons/person.svg"
-              alt="프로필"
-              width={26}
-              height={26}
-            />
-          )}
+          <img
+            src={profileUrl}
+            alt="프로필"
+            onError={(e) => {
+              // 서버 사진이 깨졌을때 자동으로 기본 profile.svg로 교체
+              e.currentTarget.src = "/icons/profile.svg";
+            }}
+          />
         </span>
         <span>{user?.name ?? "사용자"}</span>
       </div>

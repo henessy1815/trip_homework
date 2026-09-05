@@ -11,8 +11,8 @@ import type { User } from "@/types/user";
 import styles from "./styles.module.css";
 
 const getProfileUrl = (picture?: string | null) => {
-  if (!picture) return "";
-  if (picture.startsWith("http") || picture.startsWith("/")) return picture;
+  if (!picture) return "/icons/profile.svg";
+  if (picture.startsWith("/")) return picture;
   return `https://storage.googleapis.com/${picture}`;
 };
 
@@ -107,16 +107,13 @@ export default function Header() {
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
               <span className={styles.profileAvatar}>
-                {profileUrl ? (
-                  <img src={profileUrl} alt={user?.name ?? "프로필"} />
-                ) : (
-                  <Image
-                    src="/icons/person.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  />
-                )}
+                <img
+                  src={profileUrl}
+                  alt={user?.name ?? "프로필"}
+                  onError={(e) => {
+                    e.currentTarget.src = "/icons/profile.svg";
+                  }}
+                />
               </span>
               <Image
                 className={styles.profileArrow}
@@ -137,16 +134,13 @@ export default function Header() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <span className={styles.menuAvatar}>
-                    {profileUrl ? (
-                      <img src={profileUrl} alt={user?.name ?? "프로필"} />
-                    ) : (
-                      <Image
-                        src="/icons/person.svg"
-                        alt=""
-                        width={24}
-                        height={24}
-                      />
-                    )}
+                    <img
+                      src={profileUrl}
+                      alt={user?.name ?? "프로필"}
+                      onError={(e) => {
+                        e.currentTarget.src = "/icons/profile.svg";
+                      }}
+                    />
                   </span>
                   <strong>{user?.name ?? "로그인 사용자"}</strong>
                   <Image
